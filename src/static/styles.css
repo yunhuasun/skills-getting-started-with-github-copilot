@@ -76,7 +76,8 @@ section h3 {
 
 .activity-card .participants-list {
   margin-top: 10px;
-  padding-left: 20px;
+  padding-left: 0;
+  list-style: none;
 }
 
 .activity-card .participants-list li {
@@ -86,7 +87,23 @@ section h3 {
   border-radius: 6px;
   color: #0b3b78;
   font-size: 14px;
-  list-style: disc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.activity-card .remove-participant {
+  background: transparent;
+  border: none;
+  color: #c62828;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+.activity-card .remove-participant:hover {
+  background: rgba(198, 40, 40, 0.08);
 }
 
 .activity-card .no-participants {

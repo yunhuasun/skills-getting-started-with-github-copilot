@@ -42,8 +42,47 @@ document.addEventListener("DOMContentLoaded", () => {
           ul.className = "participants-list";
           details.participants.forEach((participant) => {
             const li = document.createElement("li");
+            li.className = "participant-item";
+
+            const nameSpan = document.createElement("span");
             // use textContent to avoid accidental HTML injection
-            li.textContent = participant;
+            nameSpan.textContent = participant;
+
+            const removeBtn = document.createElement("button");
+            removeBtn.className = "remove-participant";
+            removeBtn.setAttribute("aria-label", `Remove ${participant}`);
+            removeBtn.textContent = "✖";
+
+            removeBtn.addEventListener("click", async () => {
+              try {
+                const res = await fetch(
+                  `/activities/${encodeURIComponent(name)}/participants?email=${encodeURIComponent(participant)}`,
+                  { method: "DELETE" }
+                );
+                const result = await res.json();
+                if (res.ok) {
+                  messageDiv.textContent = result.message;
+                  messageDiv.className = "success";
+                  messageDiv.classList.remove("hidden");
+                  // Refresh activities list
+                  fetchActivities();
+                } else {
+                  messageDiv.textContent = result.detail || "Could not remove participant";
+                  messageDiv.className = "error";
+                  messageDiv.classList.remove("hidden");
+                }
+
+                setTimeout(() => { messageDiv.classList.add("hidden"); }, 5000);
+              } catch (err) {
+                messageDiv.textContent = "Failed to remove participant.";
+                messageDiv.className = "error";
+                messageDiv.classList.remove("hidden");
+                console.error("Error removing participant:", err);
+              }
+            });
+
+            li.appendChild(nameSpan);
+            li.appendChild(removeBtn);
             ul.appendChild(li);
           });
           activityCard.appendChild(ul);
