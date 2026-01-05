@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // Clear loading message
       activitiesList.innerHTML = "";
 
+      // Reset activity select so options don't accumulate on repeated loads
+      activitySelect.innerHTML = '<option value="">-- Select an activity --</option>';
+
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
         const activityCard = document.createElement("div");
@@ -26,6 +29,30 @@ document.addEventListener("DOMContentLoaded", () => {
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
         `;
+
+        // Participants section (bulleted list)
+        const participantsHeading = document.createElement("h5");
+        participantsHeading.textContent = "Participants";
+        participantsHeading.style.marginTop = "10px";
+        participantsHeading.style.color = "#333";
+        activityCard.appendChild(participantsHeading);
+
+        if (details.participants && details.participants.length > 0) {
+          const ul = document.createElement("ul");
+          ul.className = "participants-list";
+          details.participants.forEach((participant) => {
+            const li = document.createElement("li");
+            // use textContent to avoid accidental HTML injection
+            li.textContent = participant;
+            ul.appendChild(li);
+          });
+          activityCard.appendChild(ul);
+        } else {
+          const p = document.createElement("p");
+          p.className = "no-participants";
+          p.textContent = "No participants yet.";
+          activityCard.appendChild(p);
+        }
 
         activitiesList.appendChild(activityCard);
 
